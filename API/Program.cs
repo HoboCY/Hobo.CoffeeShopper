@@ -8,12 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication("Bearer")
-	.AddJwtBearer("Bearer", options =>
+//builder.Services.AddAuthentication("Bearer")
+//	.AddJwtBearer("Bearer", options =>
+//	{
+//		options.Authority = "https://localhost:5000";
+//		options.Audience = "CoffeeAPI";
+//	});
+
+builder.Services.AddCors(opt =>
+{
+	opt.AddDefaultPolicy(c =>
 	{
-		options.Authority = "https://localhost:5000";
-		options.Audience = "CoffeeAPI";
+		c.WithOrigins("http://localhost:5173");
+		c.AllowAnyHeader();
+		c.AllowAnyMethod();
 	});
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,6 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
